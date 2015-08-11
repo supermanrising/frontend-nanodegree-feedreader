@@ -45,7 +45,7 @@ $(function() {
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
-         it('has defined name', function() {
+        it('has defined name', function() {
             var numberOfFeeds = allFeeds.length;
             for (i = 0; i < numberOfFeeds; i++) {
                 expect(allFeeds[i].name).toBeDefined();
@@ -110,8 +110,7 @@ $(function() {
         it('should have at least 1 entry', function(done) {
             // declare variable for `.entry` element within the `.feed` element
             var entry = $('.feed').has('.entry');
-            // check if entry is defined
-            expect(entry).toBeDefined();
+            // check if entry has exists
             expect(entry.length).toBeGreaterThan(0);
             done();
         });
@@ -129,7 +128,7 @@ $(function() {
                 contentBefore = $('.feed').html();
                 // load feed with new data and define the contentAfter variable
                 loadFeed(1,function() {
-                    contentAfter = $('.feed').html;
+                    contentAfter = $('.feed').html();
                     done();
                 });
             });
