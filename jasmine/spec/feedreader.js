@@ -23,6 +23,7 @@ $(function() {
          */
         it('are defined', function() {
             expect(allFeeds).toBeDefined();
+            expect(allFeeds instanceof Array).toBeTruthy();
             expect(allFeeds.length).not.toBe(0);
         });
 
@@ -31,13 +32,11 @@ $(function() {
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
-
         it('has defined url', function() {
             var numberOfFeeds = allFeeds.length;
             for (i = 0; i < numberOfFeeds; i++) {
                 expect(allFeeds[i].url).toBeDefined();
-                expect(allFeeds[i].url).not.toBe("");
-                expect(allFeeds[i].url).toContain("http");
+                expect(allFeeds[i].url).toMatch(/^http(s?)\:\/\//);
             }
         });
 
@@ -46,11 +45,11 @@ $(function() {
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
-
          it('has defined name', function() {
             var numberOfFeeds = allFeeds.length;
             for (i = 0; i < numberOfFeeds; i++) {
                 expect(allFeeds[i].name).toBeDefined();
+                expect(typeof allFeeds[i].name).toBe('string');
                 expect(allFeeds[i].name).not.toBe("");
             }
         });
@@ -108,12 +107,12 @@ $(function() {
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
          */
-
         it('should have at least 1 entry', function(done) {
             // declare variable for `.entry` element within the `.feed` element
             var entry = $('.feed').has('.entry');
             // check if entry is defined
             expect(entry).toBeDefined();
+            expect(entry.length).toBeGreaterThan(0);
             done();
         });
 
@@ -121,27 +120,27 @@ $(function() {
 
     /* Test suite for "New Feed Selection" */
     describe('New Feed Selection', function() {
-        var initialEntries,     // feed entries after first loadfeed() function has been executed
-            newEntries;         // feed entries after second loadfeed() function has been executed
+        var contentBefore,      // feed entries after first loadfeed() function has been executed
+            contentAfter;       // feed entries after second loadfeed() function has been executed
 
         beforeEach(function(done) {
-            // load feed and define initialEntries variable
-            loadFeed(0);
-            initialEntries = $('.feed').has('.entry');
-
-            // load feed with new data and define the newEntries variable
-            loadFeed(1,function() {
-                newEntries = $('.feed').has('.entry');
-                done();
+            // load feed and define contentBefore variable
+            loadFeed(0, function() {
+                contentBefore = $('.feed').html();
+                // load feed with new data and define the contentAfter variable
+                loadFeed(1,function() {
+                    contentAfter = $('.feed').html;
+                    done();
+                });
             });
         });
 
-        /* This test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
+        /* This test ensures that when a new feed is loaded
+         * by the loadFeed function the content actually changes.
          */
         it('should change when a new feed is loaded', function(done) {
-            // check if initialEntries & newEntries are different
-            expect(newEntries).not.toBe(initialEntries);
+            // check if contentBefore & contentAfter are different
+            expect(contentBefore).not.toBe(contentAfter);
             done();
         });
     });
